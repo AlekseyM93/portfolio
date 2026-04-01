@@ -26,6 +26,7 @@
     </div>
     <nav class="main-nav" aria-label="Основная навигация">
       <a href="#about">Обо мне</a>
+      <a href="#testimonials">Отзывы</a>
       <a href="#skills">Услуги</a>
       <a href="#projects">Проекты</a>
       <a href="#contacts">Контакты</a>
@@ -261,6 +262,70 @@
         <a class="btn btn-ghost" href="#projects">К проектам</a>
       </div>
     </section>
+
+    <section class="section section--band section--testimonials reveal" id="testimonials">
+      <header class="section-head section-head--center">
+        <span class="section-label">11 — Отзывы</span>
+        <h2>Что говорят клиенты</h2>
+      </header>
+      <p class="section-lead testimonials__lead section-lead--center">
+        Потяните верхнюю карточку влево или нажмите «Следующий».
+      </p>
+      <div class="testimonials-stack" id="testimonials-stack">
+        <div class="testimonials-stack__viewport">
+          <div class="testimonials-stack__inner" id="testimonials-deck" role="region" aria-label="Отзывы клиентов">
+            <article class="testimonial-card testimonial-card--front" data-index="0">
+              <img
+                class="testimonial-card__avatar"
+                src="https://i.pravatar.cc/128?u=Maria%20Kovaleva"
+                alt="Портрет Марии Ковалевой"
+                width="128"
+                height="128"
+                loading="lazy"
+                decoding="async"
+              >
+              <blockquote class="testimonial-card__quote">
+                «Сайт получился именно таким, как в голове: быстро, без лишних итераций. Уже рекомендую коллегам.»
+              </blockquote>
+              <cite class="testimonial-card__author">Мария Ковалева — маркетинг</cite>
+            </article>
+            <article class="testimonial-card testimonial-card--middle" data-index="1">
+              <img
+                class="testimonial-card__avatar"
+                src="https://i.pravatar.cc/128?u=Alexey%20Tarasov"
+                alt="Портрет Алексея Тарасова"
+                width="128"
+                height="128"
+                loading="lazy"
+                decoding="async"
+              >
+              <blockquote class="testimonial-card__quote">
+                «Наконец-то не очередной шаблон. Визуал и логика совпали с тем, что мы рассказывали инвесторам.»
+              </blockquote>
+              <cite class="testimonial-card__author">Алексей Тарасов — основатель</cite>
+            </article>
+            <article class="testimonial-card testimonial-card--back" data-index="2">
+              <img
+                class="testimonial-card__avatar"
+                src="https://i.pravatar.cc/128?u=Elena%20Sokolova"
+                alt="Портрет Елены Соколовой"
+                width="128"
+                height="128"
+                loading="lazy"
+                decoding="async"
+              >
+              <blockquote class="testimonial-card__quote">
+                «Работает и как презентация, и как лендинг: структура, стиль — всё на месте.»
+              </blockquote>
+              <cite class="testimonial-card__author">Елена Соколова — продакт</cite>
+            </article>
+          </div>
+        </div>
+        <button type="button" class="btn btn-ghost testimonials-stack__next" id="testimonials-next" aria-controls="testimonials-deck">
+          Следующий отзыв
+        </button>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer reveal" id="contacts">
@@ -294,6 +359,52 @@
       }
 
       var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      (function initTestimonials() {
+        var section = document.getElementById("testimonials");
+        var deck = document.getElementById("testimonials-deck");
+        var btn = document.getElementById("testimonials-next");
+        if (!section || !deck) return;
+
+        if (reduced) {
+          section.classList.add("testimonials--reduced");
+          return;
+        }
+
+        var cards = Array.prototype.slice.call(deck.querySelectorAll(".testimonial-card"));
+        var positions = ["front", "middle", "back"];
+
+        function applyPositions() {
+          cards.forEach(function (card, i) {
+            card.className = "testimonial-card testimonial-card--" + positions[i];
+          });
+        }
+
+        function shuffle() {
+          positions.unshift(positions.pop());
+          applyPositions();
+        }
+
+        deck.addEventListener(
+          "pointerdown",
+          function (e) {
+            var card = e.target.closest(".testimonial-card");
+            if (!card || !card.classList.contains("testimonial-card--front")) return;
+            var startX = e.clientX;
+            function onUp(ev) {
+              document.removeEventListener("pointerup", onUp);
+              if (startX - ev.clientX > 150) shuffle();
+            }
+            document.addEventListener("pointerup", onUp);
+          },
+          true
+        );
+
+        if (btn) {
+          btn.addEventListener("click", shuffle);
+        }
+      })();
+
       var h1 = document.getElementById("hero-title");
       if (h1 && !reduced) {
         var raw = h1.textContent.trim();

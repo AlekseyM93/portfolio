@@ -902,6 +902,161 @@ p {
 .reveal.is-visible .badges span:nth-child(8) { transition-delay: 0.25s; }
 .reveal.is-visible .badges span:nth-child(9) { transition-delay: 0.28s; }
 
+/* ——— Отзывы (колода карточек, аналог framer-motion) ——— */
+.section--testimonials {
+  text-align: center;
+}
+
+.testimonials__lead {
+  max-width: 42rem;
+}
+
+.section--testimonials .testimonials__lead {
+  margin-bottom: 1.75rem;
+}
+
+.testimonials-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.testimonials-stack__viewport {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  min-height: 450px;
+  margin: 0 auto;
+  padding: 0 clamp(0.5rem, 4vw, 1.5rem);
+}
+
+.testimonials-stack__inner {
+  position: relative;
+  width: min(100%, 350px);
+  height: 450px;
+  margin: 0 auto;
+}
+
+.testimonial-card {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 2px solid rgba(100, 116, 139, 0.55);
+  background: linear-gradient(
+    145deg,
+    rgba(15, 23, 42, 0.75),
+    rgba(15, 23, 42, 0.45)
+  );
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-panel), 0 0 40px var(--lilac-glow);
+  transition:
+    transform 0.35s var(--ease-out),
+    box-shadow 0.35s var(--ease-out);
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.testimonial-card__avatar {
+  pointer-events: none;
+  margin: 0 auto;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  border: 2px solid rgba(56, 189, 248, 0.35);
+  object-fit: cover;
+  background: var(--bg-elevated);
+}
+
+.testimonial-card__quote {
+  margin: 0;
+  text-align: center;
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.testimonial-card__author {
+  display: block;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-style: normal;
+  color: var(--lilac);
+}
+
+.testimonial-card--front {
+  z-index: 2;
+  transform: rotate(-6deg) translateX(0);
+  cursor: grab;
+}
+
+.testimonial-card--front:active {
+  cursor: grabbing;
+}
+
+.testimonial-card--middle {
+  z-index: 1;
+  transform: rotate(0deg) translateX(33%);
+}
+
+.testimonial-card--back {
+  z-index: 0;
+  transform: rotate(6deg) translateX(66%);
+}
+
+.testimonial-card:not(.testimonial-card--front) {
+  pointer-events: none;
+}
+
+.testimonials-stack__next {
+  flex-shrink: 0;
+}
+
+/* Упрощённая вёрстка при отключённой анимации */
+#testimonials.testimonials--reduced .testimonials__lead,
+#testimonials.testimonials--reduced .testimonials-stack__next {
+  display: none;
+}
+
+#testimonials.testimonials--reduced .testimonials-stack__viewport {
+  min-height: 0;
+  padding-left: 0;
+}
+
+#testimonials.testimonials--reduced .testimonials-stack__inner {
+  position: static;
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+#testimonials.testimonials--reduced .testimonial-card {
+  position: relative;
+  inset: auto;
+  transform: none;
+  pointer-events: auto;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-card {
+    transition: none;
+  }
+}
+
 /* ——— Футер ——— */
 .site-footer {
   position: relative;
