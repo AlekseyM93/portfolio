@@ -258,7 +258,9 @@
       </header>
       <p class="section-lead section-lead--center">Концепция, структура, упаковка и реализация — от первого вайба до готовой страницы.</p>
       <div class="hero-actions hero-actions--center">
-        <a class="btn btn-solid" href="#contacts">Написать мне</a>
+        <button type="button" class="btn btn-solid" id="contact-modal-open" aria-haspopup="dialog" aria-controls="contact-modal" aria-expanded="false">
+          Написать мне
+        </button>
         <a class="btn btn-ghost" href="#projects">К проектам</a>
       </div>
     </section>
@@ -339,8 +341,8 @@
       </div>
       <div class="footer-col">
         <p class="footer-col__title">Контакты</p>
-        <p><strong>Telegram:</strong> @yourname</p>
-        <p><strong>Email:</strong> hello@yourmail.com</p>
+        <p><strong>Telegram:</strong> <a class="footer-link" href="https://t.me/morozovich_aleks" target="_blank" rel="noopener noreferrer">@morozovich_aleks</a></p>
+        <p><strong>Email:</strong> <a class="footer-link" href="mailto:morovich_aleks@mail.ru">morovich_aleks@mail.ru</a></p>
       </div>
       <div class="footer-col">
         <p class="footer-col__title">Площадки</p>
@@ -349,6 +351,44 @@
     </div>
     <p class="site-footer__bar">© Портфолио · Собрано как единая визуальная система</p>
   </footer>
+
+  <div class="contact-modal" id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title" hidden>
+    <div class="contact-modal__backdrop" tabindex="-1" data-close-contact-modal></div>
+    <div class="contact-modal__panel deck-panel">
+      <div class="deck-panel__corners" aria-hidden="true"></div>
+      <button type="button" class="contact-modal__close" data-close-contact-modal aria-label="Закрыть окно">
+        <span aria-hidden="true">×</span>
+      </button>
+      <div class="contact-modal__body" id="contact-modal-form-wrap">
+        <h2 class="contact-modal__title" id="contact-modal-title">Написать мне</h2>
+        <p class="contact-modal__intro">Оставьте контакты — отвечу в удобном для вас канале.</p>
+        <form class="contact-form" id="contact-form" novalidate>
+          <div class="contact-form__field">
+            <label for="contact-name">Имя</label>
+            <input id="contact-name" name="name" type="text" autocomplete="name" required placeholder="Как к вам обращаться">
+          </div>
+          <div class="contact-form__field">
+            <label for="contact-email">Электронная почта</label>
+            <input id="contact-email" name="email" type="email" autocomplete="email" required placeholder="name@example.com">
+          </div>
+          <div class="contact-form__field">
+            <label for="contact-phone">Номер телефона</label>
+            <input id="contact-phone" name="phone" type="tel" autocomplete="tel" required placeholder="+7 (___) ___-__-__">
+          </div>
+          <label class="contact-form__consent">
+            <input id="contact-consent" name="consent" type="checkbox" value="yes" required>
+            <span>Даю согласие на обработку моих персональных данных</span>
+          </label>
+          <button type="submit" class="btn btn-solid contact-form__submit">Отправить</button>
+        </form>
+      </div>
+      <div class="contact-modal__success" id="contact-modal-success" hidden>
+        <p class="contact-modal__success-title">Спасибо!</p>
+        <p class="contact-modal__success-text">Заявка принята. Я свяжусь с вами в ближайшее время.</p>
+        <button type="button" class="btn btn-ghost" data-close-contact-modal>Закрыть</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     (function () {
@@ -402,6 +442,74 @@
 
         if (btn) {
           btn.addEventListener("click", shuffle);
+        }
+      })();
+
+      (function initContactModal() {
+        var modal = document.getElementById("contact-modal");
+        var openBtn = document.getElementById("contact-modal-open");
+        var form = document.getElementById("contact-form");
+        var formWrap = document.getElementById("contact-modal-form-wrap");
+        var successEl = document.getElementById("contact-modal-success");
+        if (!modal || !openBtn) return;
+
+        var previousActive = null;
+
+        function resetModalState() {
+          if (!form || !formWrap || !successEl) return;
+          form.reset();
+          formWrap.removeAttribute("hidden");
+          successEl.setAttribute("hidden", "");
+        }
+
+        function openModal() {
+          previousActive = document.activeElement;
+          modal.removeAttribute("hidden");
+          document.body.classList.add("modal-open");
+          openBtn.setAttribute("aria-expanded", "true");
+          var first = form && form.querySelector("input:not([type=checkbox])");
+          if (first) {
+            window.setTimeout(function () {
+              first.focus();
+            }, 10);
+          }
+        }
+
+        function closeModal() {
+          modal.setAttribute("hidden", "");
+          document.body.classList.remove("modal-open");
+          openBtn.setAttribute("aria-expanded", "false");
+          if (previousActive && typeof previousActive.focus === "function") {
+            previousActive.focus();
+          }
+          resetModalState();
+        }
+
+        openBtn.addEventListener("click", openModal);
+
+        modal.querySelectorAll("[data-close-contact-modal]").forEach(function (el) {
+          el.addEventListener("click", function () {
+            closeModal();
+          });
+        });
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key !== "Escape" || modal.hasAttribute("hidden")) return;
+          closeModal();
+        });
+
+        if (form && formWrap && successEl) {
+          form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            if (!form.checkValidity()) {
+              form.reportValidity();
+              return;
+            }
+            formWrap.setAttribute("hidden", "");
+            successEl.removeAttribute("hidden");
+            var btnOk = successEl.querySelector("button");
+            if (btnOk) btnOk.focus();
+          });
         }
       })();
 
