@@ -791,6 +791,24 @@ body.modal-open {
   cursor: pointer;
 }
 
+.contact-form__legal-link {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.4);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.contact-form__legal-link:hover {
+  color: #7dd3fc;
+  border-bottom-color: #7dd3fc;
+}
+
+.contact-form__legal-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 .contact-form__submit {
   margin-top: 0.35rem;
   width: 100%;
@@ -1310,7 +1328,7 @@ p {
 
 .site-footer__grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 2rem;
   align-items: start;
 }
@@ -1386,6 +1404,80 @@ p {
   text-align: center;
 }
 
+/* ——— Юридические страницы ——— */
+.legal-page {
+  min-height: 100vh;
+}
+
+.legal-page__main {
+  position: relative;
+  z-index: 2;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: clamp(2rem, 6vw, 4rem) var(--space-gutter);
+}
+
+.legal-doc {
+  position: relative;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(150deg, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.86));
+  box-shadow: var(--shadow-panel);
+}
+
+.legal-doc__back {
+  display: inline-block;
+  margin-bottom: 1rem;
+  font-size: 0.86rem;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.legal-doc__back:hover {
+  border-bottom-color: rgba(56, 189, 248, 0.45);
+}
+
+.legal-doc h1 {
+  font-size: clamp(1.5rem, 3.6vw, 2.2rem);
+  margin: 0.25rem 0 0.5rem;
+}
+
+.legal-doc h2 {
+  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+  margin: 1.5rem 0 0.5rem;
+  color: var(--text);
+}
+
+.legal-doc p,
+.legal-doc li {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: none;
+}
+
+.legal-doc ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.legal-doc a {
+  color: var(--accent);
+}
+
+.legal-doc a:hover {
+  color: #7dd3fc;
+}
+
+.legal-doc__date {
+  margin-top: 0;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
 /* ——— Адаптив ——— */
 @media (max-width: 980px) {
   .hero__inner {
@@ -1410,7 +1502,7 @@ p {
   }
 
   .site-footer__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.75rem;
   }
 
@@ -1429,6 +1521,10 @@ p {
 
   .section {
     padding-top: clamp(2.75rem, 7vw, 4rem);
+  }
+
+  .site-footer__grid {
+    grid-template-columns: 1fr;
   }
 }
 
